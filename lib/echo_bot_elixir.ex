@@ -12,7 +12,7 @@ defmodule EchoBotElixir do
     receive do
       :poll ->
         poll_id = state.latest_update_id
-        get_update_response = TelegramApi.getUpdates poll_id
+        get_update_response = TelegramApi.get_updates poll_id
         parsed_get_update_response = parse_get_update get_update_response
         telegramMessageUpdates = TelegramMessageUpdatesMapper.buildWith parsed_get_update_response
         send_messages telegramMessageUpdates.messages
@@ -30,7 +30,7 @@ defmodule EchoBotElixir do
     :ok
   end
   defp send_messages [head | tail] do
-    TelegramApi.sendMessage head["chat_id"], "suka hard duro"
+    TelegramApi.send_message head["chat_id"], "suka hard duro"
     send_messages tail
   end
 
