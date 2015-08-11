@@ -22,9 +22,9 @@ defmodule TelegramApi do
     {url, headers, body}
   end
 
-  defp do_request(url, :get), do: HTTPoison.get(url, [], [{:proxy, "proxy.paros.local:3128"}])
+  defp do_request(url, :get), do: HTTPoison.get(url)
 
-  defp do_request({url, headers, body}, :post), do: HTTPoison.post(url, body, headers, proxy: "proxy.paros.local:3128")
+  defp do_request({url, headers, body}, :post), do: HTTPoison.post(url, body, headers)
 
   defp handle_result result do
     case result do
