@@ -6,6 +6,7 @@ defmodule TelegramApi do
     url = "https://api.telegram.org/bot#{@token}/getUpdates?offset=#{offset}"
     |> do_request(:get)
     |> handle_result
+    |> parse_update
   end
 
   def send_message chat_id, text do
@@ -21,9 +22,9 @@ defmodule TelegramApi do
     {url, headers, body}
   end
 
-  defp do_request(url, :get), do: HTTPoison.get(url)
+  defp do_request(url, :get), do: HTTPoison.get(url, [], [{:proxy, "proxy.paros.local:3128"}])
 
-  defp do_request({url, headers, body}, :post), do: HTTPoison.post(url, body, headers)
+  defp do_request({url, headers, body}, :post), do: HTTPoison.post(url, body, headers, proxy: "proxy.paros.local:3128")
 
   defp handle_result result do
     case result do
@@ -35,5 +36,9 @@ defmodule TelegramApi do
         {:error, reason}
     end
   end
+
+  defp parse_update({:error, reason}), do: %GetUpdatesResponse{}
+
+  defp parse_update({:ok, update}), do: Poison.decode!(update, as: GetUpdatesResponse)
 
 end
