@@ -37,8 +37,8 @@ defmodule TelegramApi do
     end
   end
 
-  defp parse_update({:error, reason}), do: %GetUpdatesResponse{}
+  defp parse_update({:error, _reason}), do: %{"ok" => false, "result" => []}
 
-  defp parse_update({:ok, update}), do: Poison.decode!(update, as: GetUpdatesResponse)
+  defp parse_update({:ok, update}), do: Poison.decode! update
 
 end
